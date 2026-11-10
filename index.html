@@ -97,7 +97,7 @@ figcaption { font-size: .9rem; color: var(--muted); margin: .6rem auto 0; max-wi
 .rgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .6rem; margin-top: 1.5rem; }
 .rgrid video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; background: var(--surface); border-radius: 6px; }
 @media (max-width: 820px) { .rgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.sgrid { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem; margin-top: 1.5rem; }
+.sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
 .sgrid .grp h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; text-align: center; margin-bottom: .5rem; }
 .sgrid .row { display: grid; gap: .5rem; }
 .sgrid .row.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -209,10 +209,9 @@ footer { padding-block: 2rem 3rem; font-size: .85rem; color: var(--muted); borde
   <h3 class="sub">Steering on the robot</h3>
   <p class="lead">The same frozen policy with a whole-body distance cost from a LiDAR map built before each run and held fixed. It passed under a 1.1&nbsp;m bar in four of five attempts and stepped over a 12&nbsp;cm hurdle without falling in all three (once without touching it); the unsteered controller failed every attempt. In these trials the steered policy ran on a tethered RTX 4090 computer.</p>
   <div class="sgrid">
-    <div class="grp"><h3>1.1&nbsp;m low bar</h3><div class="row c3">
+    <div class="grp"><h3>1.1&nbsp;m low bar</h3><div class="row c2">
       <div><video src="media/rs_bar_wo.mp4" poster="media/rs_bar_wo.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, low bar, unsteered"></video><div class="lab">unsteered</div></div>
-      <div><video src="media/rs_bar_w1.mp4" poster="media/rs_bar_w1.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, low bar, steered, trial 1"></video><div class="lab ok">steered</div></div>
-      <div><video src="media/rs_bar_w2.mp4" poster="media/rs_bar_w2.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, low bar, steered, trial 2"></video><div class="lab ok">steered</div></div>
+      <div><video src="media/rs_bar_w2.mp4" poster="media/rs_bar_w2.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, low bar, steered"></video><div class="lab ok">steered</div></div>
     </div></div>
     <div class="grp"><h3>12&nbsp;cm hurdle</h3><div class="row c2">
       <div><video src="media/rs_hurdle_wo.mp4" poster="media/rs_hurdle_wo.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, hurdle, unsteered"></video><div class="lab">unsteered</div></div>
