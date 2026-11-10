@@ -151,6 +151,7 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
 </header>
 
 <div class="wrap">
+  <figure style="margin-bottom:2rem"><video src="media/promo.mp4" poster="media/promo.jpg" controls playsinline preload="metadata" aria-label="OneSteer overview video"></video></figure>
   <figure class="teaser">
     <img src="media/teaser.jpg" alt="Teaser. Left: OneSteer tracking reference motions on a real Unitree G1. Right: the same frozen policy steered by test-time costs or body-group masks in simulation: passing under a low ceiling, stepping over bars, reaching and carrying, a weak knee motor, velocity commands, and partial references.">
     <figcaption>One frozen general tracker, steerable at test time. Left: tracking arbitrary references on a Unitree G1. Right: with identical weights, differentiable costs or body-group masks adapt the behavior zero-shot in simulation (blue: earlier executed poses, the latest in the robot&rsquo;s own materials; gold: the reference pose at the critical moment).</figcaption>
@@ -166,7 +167,7 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
 <section class="wrap" id="real">
   <span class="eyebrow">Real robot</span>
   <h2 style="margin-top:.4rem">Running on a Unitree G1</h2>
-  <p class="muted" style="margin-top:.6rem">OneSteer tracking reference motions on the real robot, one generator call per 50 Hz tick. The overhead gantry is a slack safety line.</p>
+  <p class="muted" style="margin-top:.6rem">OneSteer tracking reference motions on the real robot, exported to ONNX and run on the onboard Jetson Orin NX at 50 Hz. The overhead gantry is a slack safety line.</p>
   <div class="rgrid">
       <video src="media/real1.mp4" poster="media/real1.jpg" autoplay muted loop playsinline controls preload="auto" aria-label="Real G1 clip 1"></video>
       <video src="media/real2.mp4" poster="media/real2.jpg" autoplay muted loop playsinline controls preload="auto" aria-label="Real G1 clip 2"></video>
@@ -174,6 +175,14 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
       <video src="media/real4.mp4" poster="media/real4.jpg" autoplay muted loop playsinline controls preload="auto" aria-label="Real G1 clip 4"></video>
       <video src="media/real5.mp4" poster="media/real5.jpg" autoplay muted loop playsinline controls preload="auto" aria-label="Real G1 clip 5"></video>
       <video src="media/real6.mp4" poster="media/real6.jpg" autoplay muted loop playsinline controls preload="auto" aria-label="Real G1 clip 6"></video>
+  </div>
+  <h3 style="margin-top:2rem">Steering on the robot</h3>
+  <p class="muted" style="margin-top:.5rem">The same frozen policy with a whole-body distance cost from a LiDAR map built before each run and held fixed. It passed under a 1.1&nbsp;m bar in four of five attempts and stepped over a 12&nbsp;cm hurdle without falling in all three (once without touching it); the unsteered controller failed every attempt. In these trials the steered policy ran on a tethered RTX 4090 computer.</p>
+  <div class="vgrid">
+    <figure><h3>Low bar, unsteered</h3><img src="media/real_steer_wo.jpg" alt="Real G1 without steering: the head hits the low bar." loading="lazy"></figure>
+    <figure><h3>Low bar, steered</h3><img src="media/real_steer_w.jpg" alt="Real G1 with steering: the robot ducks under the low bar." loading="lazy"></figure>
+    <figure><h3>Hurdle, unsteered</h3><img src="media/real_steer_hurdle_wo.jpg" alt="Real G1 without steering at a 12 cm hurdle." loading="lazy"></figure>
+    <figure><h3>Hurdle, steered</h3><img src="media/real_steer_hurdle_w.jpg" alt="Real G1 with steering stepping over a 12 cm hurdle." loading="lazy"></figure>
   </div>
 </section>
 
@@ -191,7 +200,7 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
     <figure><h3>Low ceiling, reference motion C</h3><video src="media/ghost_limbo_strafing.mp4" poster="media/ghost_limbo_strafing.jpg" autoplay muted loop playsinline controls preload="metadata"></video></figure>
   </div>
   <h3 style="margin-top:2.25rem">Other objectives</h3>
-  <figure style="margin-top:1rem;max-width:820px"><img src="media/q3.jpg" alt="Five tasks, each shown without (top) and with (bottom) a test-time cost: weak knee motor, tray balancing, high-five, velocity command and VR wrist targets." loading="lazy" style="background:#fff"><figcaption>The same frozen policy without (top) and with (bottom) a test-time cost: one clip each, same reference; earlier poses in grey without and blue with steering. Over the test sets, steering raises knee-fault survival from 0.71 to 0.79, halves ball loss (0.17 to 0.08) and lowers the VR wrist error from 24.3 to 14.5&nbsp;cm.</figcaption></figure>
+  <figure style="margin-top:1rem;max-width:820px"><img src="media/q3.jpg" alt="Five tasks, each shown without (top) and with (bottom) a test-time cost: weak knee motor, tray balancing, high-five, velocity command and VR wrist targets." loading="lazy" style="background:#fff"><figcaption>The same frozen policy without (top) and with (bottom) a test-time cost: one clip each, same reference; earlier poses in grey without and blue with steering. Over the test sets, steering raises knee-fault survival from 0.71 to 0.79, halves ball loss (0.16 to 0.08) and lowers the VR wrist error from 24.3 to 16.4&nbsp;cm.</figcaption></figure>
   <h3 style="margin-top:2.25rem">Side by side</h3>
   <p class="muted" style="margin-top:.5rem">Every clip is a closed-loop physics rollout. Panels run left to right. The leftmost panel is the reference or the RL teacher. The others are OneSteer, without and with steering.</p>
   <div class="vgrid">
@@ -239,7 +248,7 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
       </tbody>
     </table>
   </div>
-  <p class="muted" style="margin-top:.75rem">88 walking and jogging clips that cross the terrain, each on six terrain families and ten difficulty levels, simulation only. All rows are means of four evaluation passes (the spread of the last column is about 0.02&ndash;0.05). &ldquo;Switched off&rdquo; keeps the fine-tuned weights and masks the tokens, so the gain comes from the scan. Terrain training costs some tracking accuracy (local error 28 vs. 25&ndash;26&nbsp;mm) and reduces how much extra steering helps on top. We have not run this model on the real robot.</p>
+  <p class="muted" style="margin-top:.75rem">88 walking and jogging clips that cross the terrain, each on six terrain families and ten difficulty levels, simulation only. All rows are means of four evaluation passes (the spread of the last column is about 0.02&ndash;0.05). &ldquo;Switched off&rdquo; keeps the fine-tuned weights and masks the tokens, so the gain comes from the scan. The terrain model starts from the tracker trained from scratch. On flat ground it tracks nearly as before (success 0.963 vs. 0.963, local error 27.6 vs. 26.0&nbsp;mm), and steering still helps on hurdles, with about half the gain of the model without terrain input. We have not run this model on the real robot.</p>
 </section>
 
 <section class="wrap" id="method">
@@ -248,13 +257,13 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
   <figure style="margin-top:1.25rem"><img src="media/method.png" alt="Method overview: reference window and proprioception condition a one-step generator that maps noise to a plan of future states and actions; an inverse-dynamics head turns the plan into the action; costs back-propagate to the noise." loading="lazy"></figure>
   <div class="stack" style="margin-top:1.25rem">
     <p>A deterministic tracker maps a reference to an action, so the only handle at test time is the reference itself. OneSteer instead models the future. The plan is regenerated from the robot's real state at every tick, so a cost applied to the plan acts in closed loop by construction.</p>
-    <p>Plain tracking needs one generator call (3.8 ms). Default steering uses 2 calls × 2 descent steps (20.3 ms per tick). Harder reaching targets use 12 steps (55.1 ms).</p>
+    <p>Plain tracking needs one generator call (3.8 ms on an RTX 4090); the controller on the robot keeps two calls (5.3 ms). The real-time steering setting guides the second call with two gradient steps (10.6&ndash;13.7 ms on an RTX 4090; 14.4 ms on the Orin NX, timed offline), within the 20 ms period of the 50 Hz loop.</p>
   </div>
 </section>
 
 <section class="wrap" id="tracking">
   <span class="eyebrow">Plain tracking</span>
-  <h2 style="margin-top:.4rem">A competitive general tracker from one generator call</h2>
+  <h2 style="margin-top:.4rem">A competitive general tracker</h2>
   <p class="muted" style="margin-top:.6rem">All methods run in one common harness: MuJoCo sim-to-sim, official checkpoints; 150 AMASS windows (held-out subjects) and all 512 BONES windows (unseen actors). Errors are on successful clips. On BONES, 18 windows need stairs, ladders or boxes that the flat-ground harness does not have; every method fails them, so success is capped at 96.5%. Best in bold, second underlined.</p>
   <div class="tbl">
     <table class="track">
@@ -280,22 +289,28 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
 <section class="wrap" id="results">
   <span class="eyebrow">Steering vs. editing the reference</span>
   <h2 style="margin-top:.4rem">Steering inside the generator beats editing the reference</h2>
-  <p class="muted" style="margin-top:.6rem">The RL teacher tracks a reference edited with the same cost, either offline or at every tick (closed loop). OneSteer is steered inside the generator. Time is controller time per tick.</p>
+  <p class="muted" style="margin-top:.6rem">79 walking motions of unseen actors in simulation, three runs per steered condition. The RL teacher tracks a reference edited with the same cost, offline or at every tick (closed loop); J: task-group joints, R: also root height and pitch. OneSteer is steered inside the generator and tracks the original reference. Hurdles: feasible passes may touch the hurdle with a foot, clean passes do not. Latency per control step on one RTX 4090. Bold: best real-time row (95th percentile within the 20 ms period of the 50 Hz loop on the robot&rsquo;s Orin NX); underlined: best slower row.</p>
   <div class="tbl">
     <table>
       <thead>
-        <tr><th>Method</th><th>Bars loose ↑</th><th>Ceiling 1.30 m ↑</th><th>Ceiling 1.25 m ↑</th><th>Ceiling 1.20 m ↑</th><th>Reach hit ↑</th><th>Time (ms) ↓</th></tr>
+        <tr><th></th><th colspan="2" class="grp">Hurdles &uarr;</th><th colspan="3" class="grp">Low bar: clean pass &uarr;</th><th></th><th></th></tr>
+        <tr><th>Method</th><th>feasible</th><th>clean</th><th>1.30 m</th><th>1.25 m</th><th>1.20 m</th><th>Reach hit &uarr;</th><th>Latency (ms) &darr;</th></tr>
       </thead>
       <tbody>
-        <tr><td>Teacher, original reference</td><td>0.48</td><td>0.36</td><td>0.02</td><td>0.00</td><td>0.01</td><td>2.5</td></tr>
-        <tr><td>Teacher, offline edit</td><td>0.58</td><td>0.72</td><td>0.06</td><td>0.00</td><td>0.38</td><td>2.5</td></tr>
-        <tr><td>Teacher, closed-loop edit</td><td>0.57</td><td>0.87</td><td>0.10</td><td>0.02</td><td>0.60</td><td>330.5</td></tr>
-        <tr><td>OneSteer, no steering</td><td>0.40</td><td>0.23</td><td>0.02</td><td>0.00</td><td>0.02</td><td>3.8</td></tr>
-        <tr class="ours"><td>OneSteer, steered</td><td><b>0.68</b></td><td><b>0.95</b></td><td><b>0.84</b></td><td><b>0.52</b></td><td><b>0.75</b></td><td>20.3–55.1</td></tr>
+        <tr><td>Teacher, original reference</td><td>0.48</td><td>0.01</td><td>0.36</td><td>0.02</td><td>0.00</td><td>0.01</td><td>2.5</td></tr>
+        <tr><td>Teacher, offline edit (J)</td><td>0.58</td><td>0.01</td><td>0.72</td><td>0.06</td><td>0.00</td><td>0.38</td><td>2.5</td></tr>
+        <tr><td>Teacher, offline edit (J+R)</td><td>0.47</td><td>0.00</td><td>0.55</td><td>0.03</td><td>0.00</td><td>0.31</td><td>2.5</td></tr>
+        <tr><td>Teacher, closed-loop edit (J)</td><td>0.57</td><td>0.02</td><td>0.87</td><td>0.11</td><td>0.02</td><td>0.60</td><td>330.5</td></tr>
+        <tr class="sep"><td>Teacher, closed-loop edit (J+R)</td><td>0.45</td><td>0.00</td><td>0.67</td><td>0.04</td><td>0.02</td><td>0.60</td><td>277</td></tr>
+        <tr><td>OneSteer, unsteered</td><td>0.40</td><td>0.00</td><td>0.23</td><td>0.02</td><td>0.00</td><td>0.02</td><td>5.3</td></tr>
+        <tr class="ours"><td>OneSteer, 2nd call, 2 steps (real-time)</td><td><b>0.68</b></td><td>0.11</td><td><b>0.95</b></td><td><b>0.90</b></td><td><b>0.56</b></td><td><b>0.57</b></td><td>10.6&ndash;13.7</td></tr>
+        <tr><td>OneSteer, both calls, 2 + 2 steps</td><td>0.66</td><td><b>0.12</b></td><td><b>0.95</b></td><td>0.84</td><td>0.52</td><td>0.54</td><td>17.2&ndash;20.5</td></tr>
+        <tr><td>OneSteer, 6 steps + line search per call</td><td><u>0.74</u></td><td>0.21</td><td><u>0.98</u></td><td><u>0.83</u></td><td><u>0.56</u></td><td>0.62</td><td>100&ndash;112</td></tr>
+        <tr><td>Multi-step flow, 4 Euler steps</td><td>0.66</td><td><u>0.24</u></td><td>0.94</td><td>0.59</td><td>0.35</td><td><u>0.70</u></td><td>18.1&ndash;22.2</td></tr>
       </tbody>
     </table>
   </div>
-  <p style="margin-top:1rem">The edited reference asks for crouches the deterministic tracker cannot execute, so editing even at every tick stays at 0.10 under a 1.25 m ceiling. Steering the generator reaches 0.84 and runs 6–16× faster than the closed-loop edit.</p>
+  <p style="margin-top:1rem">The edited reference asks for crouches the deterministic tracker cannot execute, so editing even at every tick stays at 0.11 under a 1.25 m bar, while steering the generator in real time reaches 0.90. A multi-step flow generator, trained on the same data and guided at every Euler step, passes fewer low bars and exceeds the 20 ms budget; it hits more wrist targets, but its steering adds more than twice as much upper-body jerk as ours.</p>
 </section>
 
 <section class="band" id="selfassess">
@@ -310,8 +325,8 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
     <div class="callout">
       <div class="stat"><div class="v num">91%</div><div class="k">of the top-2% most uncertain clips really fail (13&times; the 6.8% base rate)</div></div>
       <div class="stat"><div class="v num">74%</div><div class="k">real failures among the top 329 clips, vs. 50% for plan deviation and 34% for reference atypicality</div></div>
-      <div class="stat"><div class="v num">50%</div><div class="k">of the tracker's real failures (250 of 501) fixed by fine-tuning on the 329 clips it is least sure about; reshuffling the seed alone flips 16%</div></div>
-      <div class="stat"><div class="v num">11&ndash;56&times;</div><div class="k">cheaper than selecting by simulated rollouts (1 or 5 per clip): the 78.8k-clip library is scored in ~12 min on 8 workers, no simulator</div></div>
+      <div class="stat"><div class="v num">48&plusmn;4%</div><div class="k">of the tracker's 501 real failures fixed by fine-tuning on the 329 clips it is least sure about (three training seeds), against 27&plusmn;2% for random clips</div></div>
+      <div class="stat"><div class="v num">11&ndash;28&times;</div><div class="k">cheaper than labeling clips with five simulated rollouts each, and no simulator needed</div></div>
     </div>
 
     <div class="charts">
@@ -368,51 +383,21 @@ footer { padding-block: 2rem 3rem; font-size: var(--step--1); color: var(--muted
 
     <div class="panel" style="margin-top:1.5rem">
       <h3>From diagnosis to improvement</h3>
-      <p class="muted" style="font-size:var(--step--1)">Fine-tune the RL-from-scratch tracker for 8k iterations on the 329 clips a score ranks hardest, then re-run 7,788 library clips in simulation and compare clip by clip with the base model (501 failures). To keep what it already masters, half of the environments replay the full library with a consolidation loss toward the frozen base and keep their RL return.</p>
+      <p class="muted" style="font-size:var(--step--1)">Fine-tune the RL-from-scratch tracker for 8k iterations on the 329 clips a score ranks hardest, then re-run 7,788 library clips in simulation and compare clip by clip with the base model (501 failures). To keep what it already masters, half of the environments replay the library with a consolidation loss toward the frozen base and keep their RL return. Mean &plusmn; s.d. over three training seeds (base model: two re-evaluations).</p>
       <div class="tbl">
-        <table style="min-width:640px">
-          <thead><tr><th>Clips selected by</th><th>Failures fixed ↑</th><th>&hellip; not in the training list ↑</th><th>Untouched clips broken ↓</th><th>Library failure rate ↓</th></tr></thead>
+        <table style="min-width:760px">
+          <thead><tr><th>Clips selected by</th><th>Failures fixed &uarr;</th><th>&hellip; outside the list &uarr;</th><th>Broken &darr;</th><th>Library failures &darr;</th><th>Unseen families &uarr;</th><th>Seen families &uarr;</th></tr></thead>
           <tbody>
-            <tr><td>None (base model, new simulation seed)</td><td>16%</td><td>18%</td><td>1.0%</td><td>6.4% &rarr; 6.4%</td></tr>
-            <tr><td>Plan deviation, consolidation loss only</td><td>38%</td><td>26%</td><td>4.6%</td><td>6.4% &rarr; 8.2%</td></tr>
-            <tr><td>Plan deviation</td><td>42%</td><td>32%</td><td><b>1.1%</b></td><td><b>6.4% &rarr; 4.7%</b></td></tr>
-            <tr><td>Imagined world-model rollout</td><td>43%</td><td>37%</td><td>1.4%</td><td>6.4% &rarr; 5.0%</td></tr>
-            <tr class="ours"><td>Noise spread (ours)</td><td><b>250 / 501 (50%)</b></td><td><b>44%</b></td><td>1.9%</td><td>6.4% &rarr; 5.0%</td></tr>
+            <tr><td>None (base re-evaluated)</td><td>12.2&plusmn;4.8%</td><td>12.2&plusmn;4.8%</td><td>0.8&plusmn;0.3%</td><td>6.4%</td><td>24.5&plusmn;2.6%</td><td>9.7&plusmn;2.3%</td></tr>
+            <tr><td>Random clips</td><td>26.9&plusmn;2.0%</td><td>27.0&plusmn;2.0%</td><td>1.6&plusmn;0.2%</td><td>6.2&plusmn;0.1%</td><td>34.8&plusmn;3.8%</td><td>17.2&plusmn;6.5%</td></tr>
+            <tr><td>Kinematic rarity</td><td>30.5&plusmn;3.1%</td><td>29.8&plusmn;2.8%</td><td>1.3&plusmn;0.1%</td><td>5.7&plusmn;0.3%</td><td>35.2&plusmn;3.7%</td><td>19.9&plusmn;0.9%</td></tr>
+            <tr><td>RL critic value</td><td>41.2&plusmn;2.3%</td><td>41.2&plusmn;3.3%</td><td>1.3&plusmn;0.1%</td><td>5.0&plusmn;0.2%</td><td>37.9&plusmn;2.8%</td><td>31.7&plusmn;3.4%</td></tr>
+            <tr><td>Imagined world-model rollout</td><td>46.3&plusmn;2.8%</td><td>42.1&plusmn;4.1%</td><td>1.3&plusmn;0.1%</td><td><b>4.7&plusmn;0.2%</b></td><td>43.0&plusmn;1.0%</td><td><b>39.2&plusmn;0.9%</b></td></tr>
+            <tr class="ours"><td>Noise spread (ours)</td><td><b>48.3&plusmn;4.2%</b></td><td><b>44.2&plusmn;5.6%</b></td><td>1.7&plusmn;0.2%</td><td>5.0&plusmn;0.4%</td><td><b>47.9&plusmn;2.3%</b></td><td>38.7&plusmn;4.3%</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="muted" style="font-size:var(--step--1);margin-top:.6rem">Without the RL term on mastered clips the model breaks 4.6% of clips it used to track and the library failure rate goes up. With it, regressions stay at 1&ndash;2%, close to the 1.0% that a new simulation seed alone produces. Imagined rollouts detect failures best (AUC 0.908) but their list trains no better than plan deviation: a higher AUC does not mean better training data. Single seed; 50% vs 43% is about 33 clips.</p>
-
-      <h3 style="margin-top:1.4rem">Held-out failures and dense tracking</h3>
-      <p class="muted" style="font-size:var(--step--1)">Success on held-out failures: <em>same</em> are unseen clips of trained families, <em>fam</em> are 41 unseen families. hard40 checks that dense tracking is kept.</p>
-      <div class="tbl">
-        <table>
-          <thead><tr><th>Clips selected by</th><th>same ↑</th><th>fam ↑</th><th>hard40 succ. / E<sub>l</sub></th></tr></thead>
-          <tbody>
-            <tr><td>No fine-tuning</td><td>0.11</td><td>0.26</td><td>0.95&ndash;0.975 / 35 mm</td></tr>
-            <tr><td>Random clips</td><td>0.07</td><td>0.24</td><td>&ndash;</td></tr>
-            <tr><td>Plan deviation</td><td><b>0.45</b></td><td>0.39</td><td>0.95 / 34.4 mm</td></tr>
-            <tr><td>Imagined world-model rollout</td><td>0.40</td><td>0.42</td><td>0.95 / 34.7 mm</td></tr>
-            <tr class="ours"><td>Noise spread (ours)</td><td>0.42</td><td>0.48</td><td><b>0.975</b> / 35.7 mm</td></tr>
-            <tr class="ours"><td>Noise spread, top 1,500 of the library, 60% consolidation (run in progress, 8k of 24k its)</td><td>0.39</td><td><b>0.50</b></td><td><b>0.975 / 32.3 mm</b></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="muted" style="font-size:var(--step--1);margin-top:.6rem">Single seed. Each fam clip is worth 0.009, so a 0.09 gap is about 10 clips. The 1,500-clip run tracks ordinary motions more precisely than the base model (32.3 vs 35 mm).</p>
-
-      <h3 style="margin-top:1.4rem">Selection cost</h3>
-      <p class="muted" style="font-size:var(--step--1)">Finding the clips a tracker cannot track, extrapolated to the 78,842-clip library from timings on the same machine (RTX 4090, 32 cores) and checkpoint. Simulator numbers are for our mjlab stack, not for other papers' simulators.</p>
-      <div class="tbl">
-        <table>
-          <thead><tr><th>Method</th><th>Worker-hours</th><th>Wall, 8 workers</th><th>Needs a simulator</th></tr></thead>
-          <tbody>
-            <tr class="ours"><td>Noise spread (ours), 0.07 s per clip</td><td><b>~1.5</b></td><td><b>~12 min</b></td><td>no</td></tr>
-            <tr><td>Simulated rollout, 1 per clip</td><td>17&ndash;40</td><td>2.1&ndash;5.3 h</td><td>yes</td></tr>
-            <tr><td>Simulated rollouts, 5 per clip (as in Extreme-RGMT)</td><td>84&ndash;200</td><td>10.5&ndash;26 h</td><td>yes</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="muted" style="font-size:var(--step--1);margin-top:.6rem">Lower bound: 0.77 s per rollout with one long process; upper bound: our actual scans. The base tracker fails on only ~1.2% of the library, so rollouts spend ~83 clips per failure found. Cost only: a list selected by rollouts was not trained with this recipe.</p>
+      <p class="muted" style="font-size:var(--step--1);margin-top:.6rem">Unseen and seen families: success on held-out failures of families the lists never contain, or of trained families. The noise spread fixes nearly twice as many failures as random clips at the same budget and generalizes best to unseen families; imagined rollouts are comparable on the library but need a policy rollout and a learned world model. The RL return on mastered clips keeps regressions near the noise floor: with the consolidation loss alone, 4.6% of tracked clips break.</p>
     </div>
   </div>
 </section>
