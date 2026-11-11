@@ -207,7 +207,7 @@ footer { padding-block: 2rem 3rem; font-size: .85rem; color: var(--muted); borde
     </div>
   </div>
   <h3 class="sub">Steering on the robot</h3>
-  <p class="lead">The same frozen policy with a whole-body distance cost from a LiDAR map built before each run and held fixed. It passed under a 1.1&nbsp;m bar in four of five attempts and stepped over a 12&nbsp;cm hurdle without falling in all three (once without touching it); the unsteered controller failed every attempt. With a dance reference instead of walking and the same cost, the robot keeps dancing while it passes under the bar (two of four attempts) and steps over the hurdle (all three attempts). In these trials the steered policy ran on a tethered RTX 4090 computer.</p>
+  <p class="lead">The same frozen policy with a whole-body distance cost from a LiDAR map built before each run and held fixed. It passed under a 1.1&nbsp;m bar in four of five attempts and stepped over a 12&nbsp;cm hurdle without falling in all three (once without touching it); the unsteered controller failed every attempt. With a dance reference instead of walking and the same cost, the robot keeps dancing while it passes under the bar (two of four attempts; the large arm swings of the dance disturb its balance while it crouches) and steps over the hurdle (all three attempts). In these trials the steered policy ran on a tethered RTX 4090 computer.</p>
   <div class="sgrid">
     <div class="grp"><h3>1.1&nbsp;m low bar</h3><div class="row c2">
       <div><video src="media/rs_bar_wo.mp4" poster="media/rs_bar_wo.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Real G1, low bar, unsteered"></video><div class="lab">unsteered</div></div>
