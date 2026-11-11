@@ -333,16 +333,16 @@ footer { padding-block: 2rem 3rem; font-size: .85rem; color: var(--muted); borde
         <tr><td>Teacher, offline edit (J)</td><td>0.58</td><td>0.01</td><td>0.72</td><td>0.06</td><td>0.00</td><td>0.38</td><td>2.5</td></tr>
         <tr><td>Teacher, offline edit (J+R)</td><td>0.47</td><td>0.00</td><td>0.55</td><td>0.03</td><td>0.00</td><td>0.31</td><td>2.5</td></tr>
         <tr><td>Teacher, closed-loop edit (J)</td><td>0.57</td><td>0.02</td><td>0.87</td><td>0.11</td><td>0.02</td><td>0.60</td><td>330.5</td></tr>
-        <tr class="sep"><td>Teacher, closed-loop edit (J+R)</td><td>0.45</td><td>0.00</td><td>0.67</td><td>0.04</td><td>0.02</td><td>0.60</td><td>277</td></tr>
+        <tr><td>Teacher, closed-loop edit (J+R)</td><td>0.45</td><td>0.00</td><td>0.67</td><td>0.04</td><td>0.02</td><td>0.60</td><td>277</td></tr>
+        <tr class="sep"><td>Teacher, tracks OneSteer's steered plan (J)</td><td>0.53</td><td>0.10</td><td>0.86</td><td>0.74</td><td>0.51</td><td>0.37</td><td>10.6&ndash;13.7</td></tr>
         <tr><td>OneSteer, unsteered</td><td>0.40</td><td>0.00</td><td>0.23</td><td>0.02</td><td>0.00</td><td>0.02</td><td>5.3</td></tr>
         <tr class="ours"><td>OneSteer, 2nd call, 2 steps (real-time)</td><td><b>0.68</b></td><td>0.11</td><td><b>0.95</b></td><td><b>0.90</b></td><td><b>0.56</b></td><td><b>0.57</b></td><td>10.6&ndash;13.7</td></tr>
         <tr><td>OneSteer, both calls, 2 + 2 steps</td><td>0.66</td><td><b>0.12</b></td><td><b>0.95</b></td><td>0.84</td><td>0.52</td><td>0.54</td><td>17.2&ndash;20.5</td></tr>
         <tr><td>OneSteer, 6 steps + line search per call</td><td><u>0.74</u></td><td>0.21</td><td><u>0.98</u></td><td><u>0.83</u></td><td><u>0.56</u></td><td>0.62</td><td>100&ndash;112</td></tr>
-        <tr><td>Multi-step flow, 4 Euler steps</td><td>0.66</td><td><u>0.24</u></td><td>0.94</td><td>0.59</td><td>0.35</td><td><u>0.70</u></td><td>18.1&ndash;22.2</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">The edited reference asks for crouches the deterministic tracker cannot execute, so editing even at every tick stays at 0.11 under a 1.25 m bar, while steering the generator in real time reaches 0.90. A multi-step flow generator, trained on the same data and guided at every Euler step, passes fewer low bars and exceeds the 20 ms budget; it hits more wrist targets, but its steering adds more than twice as much upper-body jerk as ours.</p>
+  <p class="note">The edited reference asks for crouches the deterministic tracker cannot execute, so editing even at every tick stays at 0.11 under a 1.25 m bar, while steering the generator in real time reaches 0.90. A planner followed by a separate tracker also falls short: the teacher tracking OneSteer's own steered plan passes the 1.25 m bar in 0.74 of the trials, so the gain also relies on the action head trained with the generator.</p>
 </section>
 
 <section class="band" id="selfassess">
